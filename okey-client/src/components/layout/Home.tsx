@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { socketService } from '../../services/socket';
+import { Profile } from './Profile';
+import { Settings } from './Settings';
 
 interface HomeProps {
     onStartGame: () => void;
 }
 
-import { Profile } from './Profile';
-import { Settings } from './Settings';
-
 export const Home: React.FC<HomeProps> = ({ onStartGame }) => {
-    const [showProfile, setShowProfile] = React.useState(false);
-    const [showSettings, setShowSettings] = React.useState(false);
+    const [showProfile, setShowProfile] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
 
-    // Mock User
+    // Mock User (In real app, this comes from a Store/Context)
     const user = {
         name: "Misafir_99",
         level: 12,
@@ -31,105 +30,128 @@ export const Home: React.FC<HomeProps> = ({ onStartGame }) => {
     };
 
     return (
-        <div className="w-full h-full bg-[#121212] flex flex-col relative overflow-hidden font-sans select-none">
-            {/* Background Image (Dark Wood / Felt) */}
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-felt.png')] opacity-40"></div>
-            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/80 pointer-events-none"></div>
+        <div className="w-full h-full bg-wood flex flex-col relative overflow-hidden font-sans select-none text-white">
+            {/* Ambient Lighting Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.8)_100%)] pointer-events-none"></div>
 
             {/* Modals */}
             {showProfile && <Profile onClose={() => setShowProfile(false)} user={user} />}
             {showSettings && <Settings onClose={() => setShowSettings(false)} />}
 
-            {/* --- TOP BAR (User Info & Currency) --- */}
-            <div className="relative z-10 w-full px-6 py-4 flex justify-between items-center bg-gradient-to-b from-black/60 to-transparent">
-                {/* User Profile */}
-                <div className="flex items-center space-x-3">
-                    <div onClick={() => setShowProfile(true)} className="flex items-center space-x-3 bg-black/40 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md cursor-pointer hover:bg-black/60 transition">
-                        <div className="w-10 h-10 rounded-full bg-blue-600 border-2 border-white shadow-lg overflow-hidden relative">
-                            {/* Placeholder Avatar */}
-                            <div className="absolute inset-0 flex items-center justify-center font-bold text-white">ME</div>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="text-white font-bold text-sm leading-tight">Misafir_99</span>
-                            <div className="flex items-center space-x-1">
-                                <span className="text-[10px] text-yellow-400 font-bold">LVL 12</span>
-                                <div className="w-16 h-1 bg-gray-700 rounded-full overflow-hidden">
-                                    <div className="h-full bg-yellow-500 w-[60%]"></div>
-                                </div>
+            {/* --- TOP HEADER --- */}
+            <div className="relative z-10 w-full px-6 py-4 flex justify-between items-center">
+
+                {/* User Profile Card */}
+                <div
+                    onClick={() => setShowProfile(true)}
+                    className="flex items-center space-x-3 glass-panel px-2 py-1.5 pr-4 rounded-full cursor-pointer hover:bg-white/10 transition group"
+                >
+                    <div className="w-10 h-10 rounded-full border-2 border-yellow-500 shadow-lg overflow-hidden relative">
+                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} alt="avatar" className="w-full h-full bg-blue-900" />
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="text-white font-bold text-sm leading-tight group-hover:text-yellow-400 transition">{user.name}</span>
+                        <div className="flex items-center space-x-1.5">
+                            <span className="text-[10px] text-yellow-500 font-bold bg-black/40 px-1 rounded">LVL {user.level}</span>
+                            <div className="w-16 h-1.5 bg-black/50 rounded-full overflow-hidden border border-white/10">
+                                <div className="h-full bg-yellow-500 w-[70%]"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Currency */}
-                <div className="flex items-center space-x-4">
-                    <div className="flex items-center bg-black/40 px-3 py-1.5 rounded-full border border-yellow-500/30 backdrop-blur-md">
-                        <span className="text-xl mr-2">💰</span>
-                        <span className="text-yellow-100 font-bold font-mono">25,400</span>
-                        <div className="ml-2 w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center text-black font-bold text-xs cursor-pointer hover:scale-110 transition">+</div>
-                    </div>
-                    <div className="flex items-center bg-black/40 px-3 py-1.5 rounded-full border border-green-500/30 backdrop-blur-md">
-                        <span className="text-xl mr-2">💎</span>
-                        <span className="text-green-100 font-bold font-mono">120</span>
-                        <div className="ml-2 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-black font-bold text-xs cursor-pointer hover:scale-110 transition">+</div>
-                    </div>
+                {/* Currency Display */}
+                <div className="flex items-center space-x-3">
+                    <CurrencyPill icon="💰" value={user.chips.toLocaleString()} color="text-yellow-400" />
+                    <CurrencyPill icon="💎" value={user.diamonds.toLocaleString()} color="text-green-400" />
+                    <button
+                        onClick={() => setShowSettings(true)}
+                        className="w-10 h-10 glass-panel rounded-full flex items-center justify-center hover:bg-white/10 active:scale-95 transition"
+                    >
+                        ⚙️
+                    </button>
                 </div>
             </div>
 
-            {/* --- CENTER CONTENT (Play Options) --- */}
-            <div className="relative z-10 flex-1 flex flex-col items-center justify-center space-y-8">
+            {/* --- MAIN CONTENT --- */}
+            <div className="relative z-10 flex-1 flex flex-col items-center justify-center space-y-10">
 
-                {/* Logo Subtle */}
-                <h2 className="text-3xl font-black text-white/10 tracking-[1em] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -z-10 select-none pointer-events-none">
-                    OKEYPRO
-                </h2>
+                {/* Logo Area */}
+                <div className="flex flex-col items-center">
+                    <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] tracking-widest font-serif">
+                        OKEY<span className="text-yellow-500">PRO</span>
+                    </h1>
+                    <span className="text-yellow-500/80 tracking-[0.5em] text-xs font-bold mt-2 uppercase">Online Casino Experience</span>
+                </div>
 
-                {/* Play Button (Hero) */}
+                {/* Primary Action */}
                 <button
                     onClick={handlePlay}
-                    className="group relative w-64 h-24 bg-gradient-to-b from-yellow-400 to-yellow-600 rounded-2xl shadow-[0_10px_40px_rgba(255,193,7,0.4)] flex items-center justify-center transform hover:scale-105 active:scale-95 transition duration-200 border-t border-yellow-200"
+                    className="group btn-gold relative w-72 h-24 rounded-2xl flex items-center justify-center overflow-hidden"
                 >
-                    <div className="absolute inset-0 bg-yellow-300 opacity-20 blur-xl group-hover:opacity-40 transition animate-pulse"></div>
-                    <span className="text-3xl mr-3">🚀</span>
-                    <div className="text-left">
-                        <div className="text-white font-black text-2xl leading-none drop-shadow-sm">HEMEN OYNA</div>
-                        <div className="text-yellow-900 font-bold text-xs tracking-wider opacity-70">SIRA BEKLEMEDEN</div>
+                    {/* Shine Effect */}
+                    <div className="shine absolute inset-0"></div>
+
+                    <div className="relative z-10 flex items-center">
+                        <span className="text-4xl mr-4 drop-shadow-md group-hover:scale-110 transition">🚀</span>
+                        <div className="flex flex-col items-start">
+                            <span className="text-2xl font-black text-[#3E2723] leading-none tracking-wide text-shadow-sm">HEMEN OYNA</span>
+                            <span className="text-xs font-bold text-[#5D4037] tracking-wider uppercase mt-1">Sıra Beklemeden</span>
+                        </div>
                     </div>
                 </button>
 
-                {/* Secondary Modes */}
-                <div className="flex space-x-4">
-                    <button className="w-32 h-24 bg-[#1E1E1E] border border-white/5 rounded-xl flex flex-col items-center justify-center hover:bg-[#252525] transition active:scale-95 group">
-                        <span className="text-2xl mb-2 group-hover:scale-110 transition">🎰</span>
-                        <span className="text-gray-300 font-bold text-sm">Salon Seç</span>
-                    </button>
-                    <button className="w-32 h-24 bg-[#1E1E1E] border border-white/5 rounded-xl flex flex-col items-center justify-center hover:bg-[#252525] transition active:scale-95 group">
-                        <span className="text-2xl mb-2 group-hover:scale-110 transition">👥</span>
-                        <span className="text-gray-300 font-bold text-sm">Arkadaşınla</span>
-                    </button>
+                {/* Secondary Actions */}
+                <div className="flex space-x-6">
+                    <SecondaryAction icon="🎰" label="Salon Seç" />
+                    <SecondaryAction icon="👥" label="Arkadaşınla" />
                 </div>
             </div>
 
             {/* --- BOTTOM DOCK --- */}
-            <div className="relative z-10 w-full px-8 pb-6 pt-2">
-                <div className="bg-[#1A1A1A]/90 backdrop-blur-xl border border-white/5 rounded-2xl px-6 py-3 flex justify-between items-center shadow-2xl">
+            <div className="relative z-10 w-full px-6 pb-6">
+                <div className="glass-panel mx-auto max-w-2xl px-8 py-4 flex justify-between items-center rounded-2xl shadow-2xl bg-[#0f0f0f]/80">
                     <NavItem icon="🏠" label="Lobi" active />
-                    <NavItem icon="🛒" label="Market" />
-                    <NavItem icon="📅" label="Görevler" badge="2" />
                     <NavItem icon="🏆" label="Sıralama" />
-                    <NavItem icon="🥯" label="Çark" />
+                    <div className="w-16"></div> {/* Spacer for Play button if needed, or just balance */}
+                    <NavItem icon="🎁" label="Market" badge="Free" />
+                    <NavItem icon="🎒" label="Çanta" />
                 </div>
             </div>
         </div>
     );
 };
 
+// Sub-components
+
+const CurrencyPill: React.FC<{ icon: string, value: string, color: string }> = ({ icon, value, color }) => (
+    <div className="flex items-center bg-black/60 border border-white/5 px-3 py-1.5 rounded-full shadow-inner">
+        <span className="text-lg mr-2 filter drop-shadow">{icon}</span>
+        <span className={`font-mono font-bold ${color} text-sm tracking-wide`}>{value}</span>
+        <div className="ml-2 w-5 h-5 bg-yellow-600/20 border border-yellow-500/50 rounded-full flex items-center justify-center text-yellow-500 font-bold text-xs cursor-pointer hover:bg-yellow-500 hover:text-black transition">+</div>
+    </div>
+);
+
+const SecondaryAction: React.FC<{ icon: string, label: string }> = ({ icon, label }) => (
+    <button className="w-28 h-24 glass-panel rounded-xl flex flex-col items-center justify-center hover:bg-white/5 active:scale-95 transition group border border-white/5 hover:border-white/20">
+        <span className="text-3xl mb-2 group-hover:scale-110 group-hover:rotate-12 transition duration-300 filter drop-shadow-lg">{icon}</span>
+        <span className="text-gray-300 font-bold text-xs uppercase tracking-wide group-hover:text-white transition">{label}</span>
+    </button>
+);
+
 const NavItem: React.FC<{ icon: string, label: string, active?: boolean, badge?: string }> = ({ icon, label, active, badge }) => (
-    <div className={`flex flex-col items-center cursor-pointer transition ${active ? 'opacity-100 scale-110' : 'opacity-50 hover:opacity-80'}`}>
-        <div className="relative">
-            <span className="text-2xl mb-1 block">{icon}</span>
-            {badge && <div className="absolute -top-1 -right-2 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">{badge}</div>}
+    <div className={`group flex flex-col items-center cursor-pointer transition relative ${active ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}>
+        <div className={`p-2 rounded-xl transition ${active ? 'bg-white/10' : 'group-hover:bg-white/5'}`}>
+            <span className={`text-2xl block transition ${active ? 'scale-110 drop-shadow-[0_0_8px_rgba(255,215,0,0.5)]' : 'group-hover:scale-110'}`}>{icon}</span>
         </div>
-        <span className={`text-[10px] font-bold ${active ? 'text-yellow-400' : 'text-gray-400'}`}>{label}</span>
+        {badge && (
+            <div className="absolute -top-1 right-0 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm border border-black/20 animate-bounce">
+                {badge}
+            </div>
+        )}
+        <span className={`text-[10px] font-bold mt-1 uppercase tracking-wider ${active ? 'text-yellow-400' : 'text-gray-400 group-hover:text-gray-200'}`}>
+            {label}
+        </span>
     </div>
 );

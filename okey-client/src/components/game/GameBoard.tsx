@@ -6,7 +6,6 @@ import { useGameStore } from '../../store/gameStore';
 import { Chat } from './Chat';
 import { socketService } from '../../services/socket';
 import { soundManager } from '../../managers/SoundManager';
-import useImage from 'use-image';
 
 // --- Assets & Constants ---
 const TABLE_COLOR = '#1A4D2E'; // Pro Felt Green
@@ -324,86 +323,96 @@ export const GameBoard: React.FC = () => {
         return () => clearInterval(interval);
     }, [isMyTurn, timer]);
 
-    if (!isInGame) return <div className="text-white flex items-center justify-center h-full">Connecting...</div>;
+    if (!isInGame) return <div className="text-white flex items-center justify-center h-full font-bold text-xl tracking-widest animate-pulse">CONNECTING TO ROOM...</div>;
 
     return (
-        <Stage width={stageSize.width} height={stageSize.height}>
-            <Layer>
-                {/* 1. Pro Table Background */}
-                <Rect width={stageSize.width} height={stageSize.height} fill="#0e0e0e" />
+        <div className="relative w-full h-full bg-felt overflow-hidden">
+            {/* CSS Wood Border (Top/Bottom) - More realistic than Canvas Rect */}
+            <div className="absolute top-0 left-0 right-0 h-6 bg-wood shadow-lg z-10 border-b border-black/50"></div>
+            <div className="absolute bottom-0 left-0 right-0 h-6 bg-wood shadow-lg z-10 border-t border-black/50"></div>
 
-                {/* Felt Texture Pattern */}
-                <Rect
-                    width={stageSize.width}
-                    height={stageSize.height}
-                    fillRadialGradientStartPoint={{ x: centerX, y: centerY }}
-                    fillRadialGradientStartRadius={100}
-                    fillRadialGradientEndPoint={{ x: centerX, y: centerY }}
-                    fillRadialGradientEndRadius={stageSize.width * 0.8}
-                    fillRadialGradientColorStops={[0, '#1B5E20', 0.8, '#0A3311', 1, '#051A09']}
-                />
+            <Stage width={stageSize.width} height={stageSize.height} style={{ background: 'transparent' }}>
+                <Layer>
+                    {/* 2. Center Area (Deck & Indicator) */}
+                    <Group x={centerX} y={centerY}>
+                        {/* Deck - 3D Stack Look */}
+                        <Group x={-60} y={-50} onClick={handleDrawTile} onTap={handleDrawTile}>
+                            {/* Shadow */}
+                            <Rect x={4} y={4} width={50} height={70} fill="black" opacity={0.3} cornerRadius={4} blurRadius={4} />
 
-                {/* Wood Frame Border */}
-                <Rect
-                    x={0} y={0} width={stageSize.width} height={20} fill="#3E2723"
-                    shadowBlur={10}
-                />
-                <Rect
-                    x={0} y={stageSize.height - 20} width={stageSize.width} height={20} fill="#3E2723"
-                    shadowBlur={10}
-                />
+                            {/* Stack effect */}
+                            <Rect x={2} y={-2} width={50} height={70} fill="#4E342E" stroke="#3E2723" strokeWidth={1} cornerRadius={4} />
+                            <Rect x={1} y={-1} width={50} height={70} fill="#5D4037" stroke="#4E342E" strokeWidth={1} cornerRadius={4} />
 
-                {/* 2. Center Area (Deck & Indicator) */}
-                <Group x={centerX} y={centerY}>
-                    {/* Deck */}
-                    <Group x={-60} y={-40} onClick={handleDrawTile} onTap={handleDrawTile}>
-                        <Rect width={60} height={80} fill="#3E2723" cornerRadius={4} shadowBlur={5} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
-                        <Rect width={60} height={80} fill="#5D4037" cornerRadius={4} x={-4} y={-2} shadowBlur={5} />
-                        <Text text="DECK" fill="beige" fontSize={12} x={5} y={30} opacity={0.5} />
+                            {/* Top Card */}
+                            <Rect width={50} height={70} fill="linear-gradient(to bottom right, #6D4C41, #3E2723)" cornerRadius={4} shadowBlur={2} stroke="rgba(255,255,255,0.1)" strokeWidth={1} />
+
+                            {/* Pattern/Logo on Deck */}
+                            <Rect x={10} y={15} width={30} height={40} stroke="rgba(0,0,0,0.2)" strokeWidth={2} cornerRadius={2} />
+                            <Text text="OKEY" fill="rgba(255,255,255,0.4)" fontSize={10} fontStyle="bold" x={10} y={30} width={30} align="center" />
+                        </Group>
+
+                        {/* Indicator */}
+                        <Group x={20} y={-50}>
+                            {/* Shadow */}
+                            <Rect x={4} y={4} width={50} height={70} fill="black" opacity={0.3} cornerRadius={4} blurRadius={4} />
+
+                            {/* Tile Base */}
+                            <Rect width={50} height={70} fill="#F5F5F0" cornerRadius={4} shadowBlur={2} />
+                            {centerTile && (
+                                <>
+                                    <Text
+                                        text={`${centerTile.value}`}
+                                        fontSize={32}
+                                        fontStyle="bold"
+                                        fill={centerTile.color === 'red' ? '#D50000' : centerTile.color === 'black' ? '#212121' : centerTile.color === 'blue' ? '#1565C0' : '#FFA000'}
+                                        x={0} y={12} width={50} align="center"
+                                        shadowColor="rgba(0,0,0,0.1)" shadowBlur={1} shadowOffset={{ x: 0, y: 1 }}
+                                    />
+                                    <Rect x={10} y={50} width={30} height={4} fill={centerTile.color === 'red' ? '#D50000' : centerTile.color === 'black' ? '#212121' : centerTile.color === 'blue' ? '#1565C0' : '#FFA000'} cornerRadius={2} opacity={0.5} />
+                                </>
+                            )}
+                        </Group>
                     </Group>
 
-                    {/* Indicator */}
-                    <Group x={20} y={-40}>
-                        <Rect width={50} height={70} fill="#FAFAFA" cornerRadius={4} shadowBlur={5} />
-                        {centerTile && (
-                            <>
-                                <Text text={`${centerTile.value} `} fontSize={30} fontStyle="bold" fill={centerTile.color === 'red' ? '#E53935' : centerTile.color === 'black' ? '#212121' : centerTile.color === 'blue' ? '#1E88E5' : '#FBC02D'} x={10} y={15} />
-                                <Text text="GÖSTERGE" fontSize={10} fill="gray" x={-5} y={75} width={60} align="center" />
-                            </>
-                        )}
-                    </Group>
-                </Group>
+                    {/* 3. Players */}
+                    {renderPlayers()}
 
-                {/* 3. Players */}
-                {renderPlayers()}
+                    {/* 4. My Cue (Istaka) */}
+                    <Cue
+                        tiles={myHand}
+                        x={cueX}
+                        y={stageSize.height - 130}
+                        width={stageSize.width} // Full width cue? No, fixed width but centered
+                        // Actually let's use the calculated cueWidth
+                        // scale={cueScale} -> passed via Cue props? No, passed as scale
+                        scale={cueScale}
+                        isMyTurn={isMyTurn}
+                        onTileDragEnd={handleTileDragEnd}
+                        onSort={sortHand}
+                    />
 
-                {/* 4. My Cue (Istaka) */}
-                <Cue
-                    tiles={myHand}
-                    x={cueX}
-                    y={stageSize.height - 130} // 130px from bottom logic ?
-                    // Actually we set proper positions in Cue component or pass props
-                    width={stageSize.width}
-                    scale={1}
-                    isMyTurn={isMyTurn}
-                    onTileDragEnd={handleTileDragEnd}
-                    onSort={sortHand}
-                />
-
-                {/* 5. Turn Indicator Text */}
-                {
-                    isMyTurn && (
-                        <Text
-                            text="SIRA SİZDE"
-                            fontSize={32} fontStyle="bold"
-                            fill="white" stroke="black" strokeWidth={1}
-                            x={centerX - 100} y={centerY + 80}
-                            shadowColor="#4CAF50" shadowBlur={20}
-                            opacity={0.9}
-                        />
-                    )
-                }
-            </Layer >
-        </Stage >
+                    {/* 5. Turn Indicator Message */}
+                    {
+                        isMyTurn && (
+                            <Group x={centerX} y={centerY + 90}>
+                                <Rect
+                                    x={-100} y={-20} width={200} height={40}
+                                    fill="rgba(0,0,0,0.6)" cornerRadius={20}
+                                    shadowBlur={10} shadowColor="black"
+                                />
+                                <Text
+                                    text="SIRA SİZDE"
+                                    fontSize={24} fontStyle="bold"
+                                    fill="#FFD700"
+                                    width={200} x={-100} y={-10} align="center"
+                                    shadowColor="#FF6F00" shadowBlur={10}
+                                />
+                            </Group>
+                        )
+                    }
+                </Layer >
+            </Stage >
+        </div>
     );
 };

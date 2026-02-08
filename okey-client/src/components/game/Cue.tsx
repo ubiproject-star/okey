@@ -19,46 +19,60 @@ export const Cue: React.FC<CueProps> = ({ tiles, x, y, width = 800, scale = 1, i
 
     return (
         <Group x={x} y={y}>
-            {/* 1. Main Rack Body 3D */}
+            {/* 1. Main Rack Body 3D - High Fidelity Wood Gradient */}
             <Rect
                 width={width}
                 height={height}
                 fillPriority="linear-gradient"
                 fillLinearGradientStartPoint={{ x: 0, y: 0 }}
                 fillLinearGradientEndPoint={{ x: 0, y: height }}
-                fillLinearGradientColorStops={[0, '#5D4037', 1, '#3E2723']} // Dark Wood
-                cornerRadius={5}
-                shadowBlur={10}
+                fillLinearGradientColorStops={[
+                    0, '#4E342E',     // Highlight Top
+                    0.2, '#3E2723',   // Mid
+                    0.8, '#2D1B15',   // Deep Shadow
+                    1, '#1B100D'      // Edge
+                ]}
+                cornerRadius={8}
+                shadowBlur={15}
                 shadowColor="black"
-                shadowOpacity={0.6}
-            />
-            {/* Rack Depth/Lip */}
-            <Rect
-                y={height - 5}
-                width={width}
-                height={depth}
-                fill="#2D1B15"
-                cornerRadius={[0, 0, 5, 5]}
-            />
-            {/* Wood Texture CSS Overlay equivalent (subtle lines) */}
-            <Rect
-                width={width}
-                height={height}
-                fillPatternImage={undefined} // Could load image
-                opacity={0.3}
+                shadowOpacity={0.8}
+                shadowOffset={{ x: 0, y: 5 }}
             />
 
-            {/* Highlight/Active indicator */}
+            {/* Gloss/Varnish Highlight Line Top */}
+            <Rect
+                x={0} y={0} width={width} height={height / 2}
+                fillPriority="linear-gradient"
+                fillLinearGradientStartPoint={{ x: 0, y: 0 }}
+                fillLinearGradientEndPoint={{ x: 0, y: height / 2 }}
+                fillLinearGradientColorStops={[0, 'rgba(255,255,255,0.05)', 1, 'rgba(255,255,255,0)']}
+                cornerRadius={[8, 8, 0, 0]}
+            />
+
+            {/* Rack Depth/Lip - Front Face */}
+            <Rect
+                y={height - 8}
+                width={width}
+                height={depth}
+                fill="#1B0000"
+                cornerRadius={[0, 0, 8, 8]}
+                shadowBlur={5}
+                shadowColor="black"
+            />
+
+            {/* Highlight/Active indicator - Glowing Border */}
             {isMyTurn && (
                 <Rect
-                    x={-5}
-                    y={-5}
-                    width={width + 10}
-                    height={height + depth + 10}
-                    stroke="#4CAF50"
+                    x={-4}
+                    y={-4}
+                    width={width + 8}
+                    height={height + depth + 8}
+                    stroke="rgba(255, 215, 0, 0.6)" // Gold glow
                     strokeWidth={4}
                     cornerRadius={12}
-                    listening={false} // Click through
+                    shadowColor="#FFD700"
+                    shadowBlur={20}
+                    listening={false}
                 />
             )}
 
