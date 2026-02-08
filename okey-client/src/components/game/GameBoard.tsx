@@ -333,6 +333,9 @@ export const GameBoard: React.FC = () => {
 
             <Stage width={stageSize.width} height={stageSize.height} style={{ background: 'transparent' }}>
                 <Layer>
+                    {/* DEBUG RECT: Verify Canvas is Rendering */}
+                    <Rect x={100} y={100} width={100} height={100} fill="red" stroke="white" strokeWidth={5} draggable />
+
                     {/* 2. Center Area (Deck & Indicator) */}
                     <Group x={centerX} y={centerY}>
                         {/* Deck - 3D Stack Look */}

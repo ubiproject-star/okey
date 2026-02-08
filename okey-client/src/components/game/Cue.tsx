@@ -23,6 +23,8 @@ export const Cue: React.FC<CueProps> = ({ tiles, x, y, width = 800, scale = 1, i
             <Rect
                 width={width}
                 height={height}
+                fill="#4E342E"
+                /* 
                 fillPriority="linear-gradient"
                 fillLinearGradientStartPoint={{ x: 0, y: 0 }}
                 fillLinearGradientEndPoint={{ x: 0, y: height }}
@@ -31,7 +33,8 @@ export const Cue: React.FC<CueProps> = ({ tiles, x, y, width = 800, scale = 1, i
                     0.2, '#3E2723',   // Mid
                     0.8, '#2D1B15',   // Deep Shadow
                     1, '#1B100D'      // Edge
-                ]}
+                ]} 
+                */
                 cornerRadius={8}
                 shadowBlur={15}
                 shadowColor="black"
@@ -128,8 +131,3 @@ export const Cue: React.FC<CueProps> = ({ tiles, x, y, width = 800, scale = 1, i
         </Group>
     );
 };
-
-// Wrapper for Animation (Placeholder for now, implementing basic positioning first)
-// Real Fly-in requires `useSpring` from `react - spring` or `Konva.Tween` in `useEffect`.
-// Let's implement a simple `AnimatedTile` component in next step if user requests,
-// for now we stick to solid positioning but with the new detailed Look.
