@@ -37,10 +37,20 @@ function App() {
 
     socketService.on('game_start', (data) => {
       console.log('Game Started:', data);
+
+      // CRITICAL: Set myPlayerId to match socket.id so we know who we are
+      const myId = socketService.socket?.id;
+      if (myId) {
+        useGameStore.getState().setMyPlayerId(myId);
+        console.log("Set My Player ID:", myId);
+      } else {
+        console.error("Socket ID missing on game start!");
+      }
+
       soundManager.play('distribute');
-      setInGame(true);
       setGameData(data);
       updateHand(data.myHand); // Initial hand
+      setInGame(true); // Set InGame LAST to ensure data is ready
       setView('game'); // Switch to game view
     });
 
