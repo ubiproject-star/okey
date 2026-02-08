@@ -1,0 +1,26 @@
+En az 1 milyon aktif kullanıcı durumunda çalışabilecek, telegram mini uygulaması olarak online OKEY için gerekli olabilecek teknoloji araştırmalarım, lütfen kendi önerilerinide benimle paylaş:
+
+Frontend: React + Konca ( 2d rendering )
+
+Telegram: @tma.ja SDK
+
+State management: Zustand
+
+Backend:
+
+Node.js (Fastify)
+uWebsockets.js ( yüksek performanslı WS )
+Redis Cluster ( matchmaking, room state, pub/sub per 30s )
+Socket.io Redis Adapter
+
+Infra:
+
+Cloudflare
+Nginx Load Balancer
+Kubernetes (K3s kubernetes cluster, load balancer )
+Dockerization
+
+Database: Supabase ( soğuk veri; kullanıcı profilleri, verileri, geçmiş oyunlar, istatistikler, leaderboard vb. )
+
+
+Üyelik alacağım platformlar: Cloudflare, Supabase, Hetzner; Redis içinde & Hetzner'in kendi Load Balancer'ı ve K3s'i kullanılacak.

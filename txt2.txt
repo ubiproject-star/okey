@@ -1,0 +1,72 @@
+İşte 4 kişilik online Okey oyununun detaylı algoritma şeması:
+
+Okey, 106 taş ve 4 oyuncu ile oynanan bir set oluşturma oyunudur. Amaç, dağıtılan 14 taşı anlamlı gruplar (aynı sayı-farklı renk veya aynı renk-sıralı sayı) haline getirip 15. taşı boşa çıkararak eli tamamlamaktır. 'Okey' taşı her taşın yerine geçebilirken, 'Sahte Okey' sadece o el belirlenen Okey taşının nominal değerini taşır. Oyun saat yönünün tersine işler; her oyuncu bir taş çeker ve bir taş atar.
+
+1. Veri Yapıları ve Nesneler (Data Structures & Objects)
+Oyunun temel taşlarını tanımlayarak başlayalım.
+ * Taş Havuzu (Deck): Toplam 106 taş.
+   * Renkler: 4 Renk (Kırmızı, Siyah, Mavi, Sarı).
+   * Sayılar: Her renkten 1'den 13'e kadar ikişer set (4 x 13 x 2 = 104 taş).
+   * Sahte Okeyler: 2 adet (Üzerinde simge olan taşlar).
+ * Oyuncular (Players): 4 Kişi (P1, P2, P3, P4).
+   * Istaka (Hand): Her oyuncunun elindeki 14 (veya 15) taşlık dizi.
+ * Masadaki Alanlar:
+   * Gösterge (Indicator): Okey'i belirleyen açık taş.
+   * Okey (Wildcard): Göstergenin 1 fazlası olan taş (Örn: Gösterge Kırmızı 5 ise, Okey Kırmızı 6'dır).
+   * Çekme Destesi (Draw Pile): Ortada kapalı duran taşlar.
+   * Atılan Taşlar (Discard Piles): Her oyuncunun sağında biriken, solundaki oyuncunun çekebileceği yığın.
+2. Başlatma Algoritması (Initialization Phase)
+Oyun her başladığında (her elde) çalışacak fonksiyon sırasıdır.
+ * Karıştırma (Shuffle): 106 taşlık dizi rastgele karıştırılır.
+ * Okey Belirleme (Determine Joker):
+   * Desteden rastgele bir taş seçilir ve "Gösterge" olarak açılır.
+   * Okey Mantığı: Okey = (Gösterge Rengi, Gösterge Sayısı + 1).
+   * İstisna: Eğer gösterge 13 ise, Okey aynı rengin 1'lisidir.
+ * Sahte Okey Değeri Atama:
+   * "Sahte Okey" taşları, bu el boyunca "Okey" olarak belirlenen taşın orijinal sayısal değerini ve rengini temsil eder. (Örn: Okey Kırmızı 6 ise, Sahte Okey taşı Kırmızı 6 gibi davranır).
+ * Dağıtım (Dealing):
+   * İlk başlayacak oyuncuya (Dealer veya rastgele) 15 taş verilir.
+   * Diğer 3 oyuncuya 14'er taş verilir.
+   * Kalan taşlar "Çekme Destesi"ne (ortaya) konur.
+3. Oyun Döngüsü (Game Loop)
+Oyun, bir oyuncu "Bitene" (Winning Condition) veya "Taş Bitene" kadar saat yönünün tersine (sağ tarafa doğru) döner.
+Durum Makinesi (State Machine):
+ * Adım 1: Başlangıç Hamlesi (Sadece ilk oyuncu için):
+   * 15 taşı olan oyuncu taş çekmez. Fazla olan 1 taşı sağındaki oyuncunun önüne açık şekilde atar.
+ * Adım 2: Sıra Takibi (Turn Handling):
+   * Sıra P(x)'tedir.
+ * Adım 3: Taş Çekme (Draw Action):
+   * Oyuncu iki kaynaktan birini seçmelidir:
+     * A- Soldan Çek: Solundaki oyuncunun attığı son taşı alır.
+     * B- Ortadan Çek: Kapalı desteden (Draw Pile) en üstteki taşı alır.
+   * Sonuç: Oyuncunun elinde 15 taş olur.
+ * Adım 4: Kontrol ve Düzenleme (Validation & Sorting):
+   * Oyuncu elindeki taşları per (set) oluşturacak şekilde dizer (Otomatik veya manuel).
+   * Eğer el "Bitiş" koşulunu sağlıyorsa, oyuncu "Bitir" komutunu gönderir (Bkz. Bölüm 4).
+ * Adım 5: Taş Atma (Discard Action):
+   * Eğer oyuncu bitmiyorsa, elindeki en işe yaramaz 1 taşı sağındaki oyuncunun önüne atar.
+   * Sonuç: Oyuncunun eli tekrar 14 taşa düşer. Sıra P(x+1)'e geçer.
+4. Per (Set) Doğrulama Mantığı (Hand Validation Logic)
+Yapay zeka ajanının bir elin geçerli olup olmadığını anlaması için en kritik kısım burasıdır. Bir elin bitmesi için 14 taşın tamamı geçerli perlerde kullanılmalı ve artan 1 taş boşa (masaya) atılmalıdır.
+Geçerli Per Tipleri:
+ * Sıralı Per (Run):
+   * Aynı renk, birbirini takip eden en az 3 sayı.
+   * Örn: Mavi 5 - Mavi 6 - Mavi 7.
+   * 13-1 Kuralı: 13'ten sonra 1 gelebilir ama 1'den sonra 2 gelemez (Sadece 12-13-1 geçerlidir, 13-1-2 geçersizdir).
+ * Düz Per (Group):
+   * Farklı renkler, aynı sayı. En az 3, en fazla 4 taş.
+   * Örn: Mavi 10 - Sarı 10 - Siyah 10.
+ * Çifte Gitmek (7 Pairs):
+   * Oyuncu "Seri" yerine "Çift" oynamayı seçerse; 14 taşın tamamı 7 adet çiftten oluşmalıdır.
+   * Çift Tanımı: Aynı renk ve aynı sayıdan iki taş. (Örn: Kırmızı 5 + Kırmızı 5).
+   * Okey Etkisi: Okey taşı, herhangi bir taşın eşi olarak kullanılabilir.
+Okey (Joker) Kullanımı:
+ * Joker: Okey taşı, eksik olan herhangi bir taşın yerine geçer.
+ * Örn: Sarı 7 - Sarı 8 - OKEY (Burada Okey, Sarı 9 yerine geçer).
+Bitme Kontrolü (Winning Check):
+Algoritma şu soruyu sorar: "Elimdeki 15 taştan 1 tanesini çıkardığımda, kalan 14 taşın hepsi geçerli perlerin (Run veya Group) içinde mi?"
+ * Eğer EVET ise -> Oyun Biter.
+ * Eğer oyuncu OKEY taşını yere atarak biterse -> Puan havuzdaki birikenlerin 2 katı ( çanak kırma ).
+ * Eğer oyuncu ÇİFTE giderek biterse -> Puan havuzda birikenlerin 2 katı ( çanak kırma ).
+5. Puanlama ve Bitiş (Scoring)
+Okey'de genellikle giriş puan sistemi kullanılır. Örneğin 10 jetonluk odaya girişte herkesten 10 jeton düşer ve kazanana tüm puanlar gider.

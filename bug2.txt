@@ -1,0 +1,2 @@
+src/components/game/GameBoard.tsx(7,22): error TS2307: Cannot find module 'use-image' or its corresponding type declarations.
+Error: Command "npm run build" exited with 2
