@@ -7,6 +7,7 @@ import useImage from 'use-image';
 import { Chat } from './Chat';
 import { socketService } from '../../services/socket';
 import { soundManager } from '../../managers/SoundManager';
+import { ASSETS } from '../../managers/AssetManager';
 
 // --- Assets & Constants ---
 const TABLE_COLOR = '#1A4D2E'; // Pro Felt Green
@@ -19,7 +20,7 @@ const getRelativePos = (myIndex: number, targetIndex: number, total: number = 4)
 
 export const GameBoard: React.FC = () => {
     const [stageSize, setStageSize] = useState({ width: window.innerWidth, height: window.innerHeight });
-    const [goldFrameImage] = useImage('/assets/premium/gold_frame.svg');
+    const [goldFrameImage] = useImage(ASSETS.GOLD_FRAME);
 
     // Global State
     const { myHand, turn, centerTile, players, myPlayerId, moveTile, sortHand, isInGame } = useGameStore();
