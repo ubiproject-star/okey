@@ -24,3 +24,28 @@ Database: Supabase ( soğuk veri; kullanıcı profilleri, verileri, geçmiş oyu
 
 
 Üyelik alacağım platformlar: Cloudflare, Supabase, Hetzner; Redis içinde & Hetzner'in kendi Load Balancer'ı ve K3s'i kullanılacak.
+
+1. Matchmaking (Eşleştirme) ve Oda Yönetimi
+1 milyon kullanıcıda binlerce eşzamanlı (concurrent) oyun odası olacaktır.
+ * Tavsiye: Redis üzerinde Sorted Sets kullanarak "Skill-Based Matchmaking" (yetenek bazlı eşleştirme) veya "Hızlı Eşleşme" kuyrukları kurgulanmalı.
+ * Neden: Binlerce oyuncu aynı anda "oyna" butonuna bastığında, veritabanına yük bindirmeden hızlıca 4 kişilik masalar oluşturmak için Redis en verimli yoldur.
+2. State Sync ve Anti-Cheat (Hile Koruma)
+Okey gibi taş takibinin kritik olduğu oyunlarda tüm mantık sunucuda bitmelidir.
+ * Tavsiye: Authoritative Server (Yetkili Sunucu) mimarisi uygulanmalı. İstemci (React) sadece görseli render etmeli; taş çekme, taş atma ve okey deme kararları uWebSockets.js tarafında doğrulanıp Redis'teki "Game State" güncellendikten sonra tüm oyunculara yayınlanmalıdır.
+ * Neden: Telegram Mini App'ler basit birer tarayıcı olduğu için hile yapılmaya çok müsaittir. Veriyi sadece backend yönetmelidir.
+3. Graceful Recovery (Bağlantı Kopması ve Geri Dönüş)
+Mobil ağlarda (metro, asansör vb.) WebSocket bağlantısı sık sık kopacaktır.
+ * Tavsiye: Session Recovery (Oturum Kurtarma) mekanizması eklenmeli. Kullanıcı koptuğunda sunucu onu 60 saniye boyunca "AFK" (boşta) olarak odada tutmalı ve tekrar bağlandığında Zustand state'ini Redis'teki son durumla senkronize etmelidir.
+4. Cold vs Hot Data (Veri Ayrımı)
+ * Tavsiye: Oyun sırasındaki anlık taş hareketleri asla Supabase'e (PostgreSQL) yazılmamalı. Sadece oyun bittiğinde sonuçlar (kim kazandı, kaç puan aldı) Supabase'e asenkron olarak aktarılmalıdır.
+ * Neden: Saniyede binlerce taş atma işlemini SQL veritabanına yazmak sistemi kilitleyecektir.
+
+
+
+Mimari Prensipler:
+> * Authoritative Server: Tüm oyun mantığı backend'de işlenecek, frontend sadece "view" katmanı olacak.
+> * Redis-First State: Oyun devam ederken tüm anlık veriler Redis'te tutulacak, sadece oyun sonu istatistikleri Supabase'e "asenkron" yazılacak.
+> * Heartbeat & Recovery: Cloudflare üzerinden geçecek WebSocket trafiği için Ping/Pong mekanizması ve kısa süreli kopmalar için Session Recovery uygulanacak.
+> * Matchmaking: Redis Sorted Sets ile düşük gecikmeli eşleştirme kuyrukları oluşturulacak.
+
+Sistemi tasarlarken 'Cloud-Agnostic' (bulut bağımsız) ve 'Stateless' prensiplerine sadık kal ki, ileride Hetzner'den AWS'ye veya farklı bölgelere kolayca genişleyebileyim
