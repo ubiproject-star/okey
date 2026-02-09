@@ -18,7 +18,7 @@ interface CueProps {
 export const Cue: React.FC<CueProps> = ({ tiles, x, y, width = 800, scale = 1, isMyTurn = false, onTileDragEnd, onSort }) => {
     const height = 90 * scale;
     const depth = 20 * scale;
-    const [woodImage] = useImage(woodSrc);
+    const [woodImage] = useImage('/assets/premium/wood_rack.svg');
 
     return (
         <Group x={x} y={y}>

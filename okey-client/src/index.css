@@ -38,7 +38,7 @@ body {
   /* Diamond/Quilted Felt Pattern - Premium Vector Asset */
   .bg-pattern-felt {
     background-color: #1A4D2E;
-    background-image: url('./assets/premium/table_felt.svg');
+    background-image: url('/assets/premium/table_felt.svg');
     background-size: 100px 100px;
     background-position: center;
     background-repeat: repeat;

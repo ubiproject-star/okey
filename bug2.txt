@@ -1,16 +1,9 @@
-✓ 4 modules transformed.
-✗ Build failed in 141ms
+✗ Build failed in 608ms
 error during build:
-[@tailwindcss/vite:generate:build] Cannot apply unknown utility class `bg-pattern-felt`
-file: /vercel/path0/okey-client/src/index.css
-    at onInvalidCandidate (file:///vercel/path0/okey-client/node_modules/tailwindcss/dist/chunk-CT46QCH7.mjs:21:1511)
-    at Ce (file:///vercel/path0/okey-client/node_modules/tailwindcss/dist/chunk-CT46QCH7.mjs:16:36652)
-    at file:///vercel/path0/okey-client/node_modules/tailwindcss/dist/chunk-CT46QCH7.mjs:21:355
-    at br (file:///vercel/path0/okey-client/node_modules/tailwindcss/dist/chunk-CT46QCH7.mjs:3:1718)
-    at I (file:///vercel/path0/okey-client/node_modules/tailwindcss/dist/chunk-CT46QCH7.mjs:3:1377)
-    at Ae (file:///vercel/path0/okey-client/node_modules/tailwindcss/dist/chunk-CT46QCH7.mjs:21:172)
-    at Wi (file:///vercel/path0/okey-client/node_modules/tailwindcss/dist/chunk-CT46QCH7.mjs:38:294)
-    at async Za (file:///vercel/path0/okey-client/node_modules/tailwindcss/dist/chunk-CT46QCH7.mjs:38:631)
-    at async rf (file:///vercel/path0/okey-client/node_modules/tailwindcss/dist/chunk-CT46QCH7.mjs:38:1406)
-    at async lu (file:///vercel/path0/okey-client/node_modules/@tailwindcss/node/dist/index.mjs:10:3458)
+Could not resolve "../../assets/premium/gold_frame.svg" from "src/components/game/GameBoard.tsx"
+file: /vercel/path0/okey-client/src/components/game/GameBoard.tsx
+    at getRollupError (file:///vercel/path0/okey-client/node_modules/rollup/dist/es/shared/parseAst.js:402:41)
+    at error (file:///vercel/path0/okey-client/node_modules/rollup/dist/es/shared/parseAst.js:398:42)
+    at ModuleLoader.handleInvalidResolvedId (file:///vercel/path0/okey-client/node_modules/rollup/dist/es/shared/node-entry.js:21687:24)
+    at file:///vercel/path0/okey-client/node_modules/rollup/dist/es/shared/node-entry.js:21647:26
 Error: Command "npm run build" exited with 1
