@@ -34,10 +34,11 @@ body {
 @layer utilities {
   /* High Fidelity Textures */
 
-  /* User Provided Premium Background */
+  /* User Reference Background (bug9) */
   .bg-pattern-felt {
-    background-color: #1A4D2E;
-    background-image: url('/assets/user_bg.jpg');
+    background-color: #0d2b1a;
+    /* Darker fallback */
+    background-image: url('/assets/premium_bg.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
