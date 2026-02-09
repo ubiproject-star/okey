@@ -2,6 +2,7 @@ import React from 'react';
 import { Group, Rect, Text } from 'react-konva';
 import { Tile, type TileData } from './Tile';
 import useImage from 'use-image';
+import woodSrc from '../../assets/wood.png';
 
 interface CueProps {
     tiles: (TileData | null)[];
@@ -17,7 +18,7 @@ interface CueProps {
 export const Cue: React.FC<CueProps> = ({ tiles, x, y, width = 800, scale = 1, isMyTurn = false, onTileDragEnd, onSort }) => {
     const height = 90 * scale;
     const depth = 20 * scale;
-    const [woodImage] = useImage('/assets/wood.png');
+    const [woodImage] = useImage(woodSrc);
 
     return (
         <Group x={x} y={y}>

@@ -38,7 +38,7 @@ body {
   /* Diamond/Quilted Felt Pattern - Premium Asset */
   .bg-pattern-felt {
     background-color: #1A4D2E;
-    background-image: url('/assets/felt.png');
+    background-image: url('./assets/felt.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
