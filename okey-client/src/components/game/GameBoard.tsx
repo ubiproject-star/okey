@@ -331,13 +331,6 @@ export const GameBoard: React.FC = () => {
             <div className="absolute top-0 left-0 right-0 h-6 bg-wood shadow-lg z-10 border-b border-black/50"></div>
             <div className="absolute bottom-0 left-0 right-0 h-6 bg-wood shadow-lg z-10 border-t border-black/50"></div>
 
-            {/* HTML DEBUG OVERLAY */}
-            <div className="absolute top-20 left-10 z-50 bg-black/80 text-white p-4 rounded border border-red-500 font-mono text-xs">
-                <h3>HTML DEBUG</h3>
-                <p>Stage: {stageSize.width}x{stageSize.height}</p>
-                <p>InGame: {String(isInGame)}</p>
-                <p>ID: {myPlayerId || 'null'}</p>
-            </div>
 
             <Stage width={stageSize.width} height={stageSize.height} style={{ background: 'transparent' }}>
                 <Layer>
@@ -396,25 +389,36 @@ export const GameBoard: React.FC = () => {
                     {renderPlayers()}
 
                     {/* 4. My Cue (Istaka) */}
-                    {/* <Cue
+                    <Cue
                         tiles={myHand}
                         x={cueX}
                         y={stageSize.height - 130}
-                        width={stageSize.width} 
+                        width={stageSize.width}
                         scale={cueScale}
                         isMyTurn={isMyTurn}
                         onTileDragEnd={handleTileDragEnd}
                         onSort={sortHand}
-                    /> */}
+                    />
 
                     {/* 5. Turn Indicator Message */}
-                    {/* {
+                    {
                         isMyTurn && (
                             <Group x={centerX} y={centerY + 90}>
-                                ...
+                                <Rect
+                                    x={-100} y={-20} width={200} height={40}
+                                    fill="rgba(0,0,0,0.6)" cornerRadius={20}
+                                    shadowBlur={10} shadowColor="black"
+                                />
+                                <Text
+                                    text="SIRA SİZDE"
+                                    fontSize={24} fontStyle="bold"
+                                    fill="#FFD700"
+                                    width={200} x={-100} y={-10} align="center"
+                                    shadowColor="#FF6F00" shadowBlur={10}
+                                />
                             </Group>
                         )
-                    } */}
+                    }
                 </Layer >
             </Stage >
         </div>

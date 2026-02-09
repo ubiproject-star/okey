@@ -19,22 +19,11 @@ export const Cue: React.FC<CueProps> = ({ tiles, x, y, width = 800, scale = 1, i
 
     return (
         <Group x={x} y={y}>
-            {/* 1. Main Rack Body 3D - High Fidelity Wood Gradient */}
+            {/* 1. Main Rack Body 3D - Solid Wood Color for Stability */}
             <Rect
                 width={width}
                 height={height}
                 fill="#4E342E"
-                /* 
-                fillPriority="linear-gradient"
-                fillLinearGradientStartPoint={{ x: 0, y: 0 }}
-                fillLinearGradientEndPoint={{ x: 0, y: height }}
-                fillLinearGradientColorStops={[
-                    0, '#4E342E',     // Highlight Top
-                    0.2, '#3E2723',   // Mid
-                    0.8, '#2D1B15',   // Deep Shadow
-                    1, '#1B100D'      // Edge
-                ]} 
-                */
                 cornerRadius={8}
                 shadowBlur={15}
                 shadowColor="black"
@@ -42,22 +31,12 @@ export const Cue: React.FC<CueProps> = ({ tiles, x, y, width = 800, scale = 1, i
                 shadowOffset={{ x: 0, y: 5 }}
             />
 
-            {/* Gloss/Varnish Highlight Line Top */}
-            <Rect
-                x={0} y={0} width={width} height={height / 2}
-                fillPriority="linear-gradient"
-                fillLinearGradientStartPoint={{ x: 0, y: 0 }}
-                fillLinearGradientEndPoint={{ x: 0, y: height / 2 }}
-                fillLinearGradientColorStops={[0, 'rgba(255,255,255,0.05)', 1, 'rgba(255,255,255,0)']}
-                cornerRadius={[8, 8, 0, 0]}
-            />
-
             {/* Rack Depth/Lip - Front Face */}
             <Rect
                 y={height - 8}
                 width={width}
                 height={depth}
-                fill="#1B0000"
+                fill="#2D1B15"
                 cornerRadius={[0, 0, 8, 8]}
                 shadowBlur={5}
                 shadowColor="black"
