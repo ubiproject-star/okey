@@ -35,13 +35,13 @@ body {
   /* High Fidelity Textures */
 
   /* Diamond/Quilted Felt Pattern */
-  /* Diamond/Quilted Felt Pattern - Premium Asset */
+  /* Diamond/Quilted Felt Pattern - Premium Vector Asset */
   .bg-pattern-felt {
     background-color: #1A4D2E;
-    background-image: url('./assets/felt.png');
-    background-size: cover;
+    background-image: url('./assets/premium/table_felt.svg');
+    background-size: 100px 100px;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     /* Optional: Overlay a slight vignette for depth if the image doesn't have it */
     box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.8);
   }

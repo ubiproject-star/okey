@@ -4,7 +4,7 @@ import { Cue } from './Cue';
 import type { TileData } from './Tile';
 import { useGameStore } from '../../store/gameStore';
 import useImage from 'use-image';
-import goldFrameSrc from '../../assets/gold_frame.png';
+import goldFrameSrc from '../../assets/premium/gold_frame.svg';
 import { Chat } from './Chat';
 import { socketService } from '../../services/socket';
 import { soundManager } from '../../managers/SoundManager';
