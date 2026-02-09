@@ -351,12 +351,49 @@ export const GameBoard: React.FC = () => {
                     {/* ISOLATION MODE: Commenting out everything else to verify Canvas works */}
 
                     {/* 2. Center Area (Deck & Indicator) */}
-                    {/* <Group x={centerX} y={centerY}>
-                        ...
-                    </Group> */}
+                    <Group x={centerX} y={centerY}>
+                        {/* Deck - 3D Stack Look */}
+                        <Group x={-60} y={-50} onClick={handleDrawTile} onTap={handleDrawTile}>
+                            {/* Shadow */}
+                            <Rect x={4} y={4} width={50} height={70} fill="black" opacity={0.3} cornerRadius={4} blurRadius={4} />
+
+                            {/* Stack effect */}
+                            <Rect x={2} y={-2} width={50} height={70} fill="#4E342E" stroke="#3E2723" strokeWidth={1} cornerRadius={4} />
+                            <Rect x={1} y={-1} width={50} height={70} fill="#5D4037" stroke="#4E342E" strokeWidth={1} cornerRadius={4} />
+
+                            {/* Top Card */}
+                            <Rect width={50} height={70} fill="linear-gradient(to bottom right, #6D4C41, #3E2723)" cornerRadius={4} shadowBlur={2} stroke="rgba(255,255,255,0.1)" strokeWidth={1} />
+
+                            {/* Pattern/Logo on Deck */}
+                            <Rect x={10} y={15} width={30} height={40} stroke="rgba(0,0,0,0.2)" strokeWidth={2} cornerRadius={2} />
+                            <Text text="OKEY" fill="rgba(255,255,255,0.4)" fontSize={10} fontStyle="bold" x={10} y={30} width={30} align="center" />
+                        </Group>
+
+                        {/* Indicator */}
+                        <Group x={20} y={-50}>
+                            {/* Shadow */}
+                            <Rect x={4} y={4} width={50} height={70} fill="black" opacity={0.3} cornerRadius={4} blurRadius={4} />
+
+                            {/* Tile Base */}
+                            <Rect width={50} height={70} fill="#F5F5F0" cornerRadius={4} shadowBlur={2} />
+                            {centerTile && (
+                                <>
+                                    <Text
+                                        text={`${centerTile.value}`}
+                                        fontSize={32}
+                                        fontStyle="bold"
+                                        fill={centerTile.color === 'red' ? '#D50000' : centerTile.color === 'black' ? '#212121' : centerTile.color === 'blue' ? '#1565C0' : '#FFA000'}
+                                        x={0} y={12} width={50} align="center"
+                                        shadowColor="rgba(0,0,0,0.1)" shadowBlur={1} shadowOffset={{ x: 0, y: 1 }}
+                                    />
+                                    <Rect x={10} y={50} width={30} height={4} fill={centerTile.color === 'red' ? '#D50000' : centerTile.color === 'black' ? '#212121' : centerTile.color === 'blue' ? '#1565C0' : '#FFA000'} cornerRadius={2} opacity={0.5} />
+                                </>
+                            )}
+                        </Group>
+                    </Group>
 
                     {/* 3. Players */}
-                    {/* {renderPlayers()} */}
+                    {renderPlayers()}
 
                     {/* 4. My Cue (Istaka) */}
                     {/* <Cue
