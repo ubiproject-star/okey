@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Stage, Layer, Rect, Text, Group, Circle, Arc, Image as KonvaImage } from 'react-konva';
+import { Stage, Layer, Rect, Text, Group, Circle, Arc, Star, Image as KonvaImage } from 'react-konva';
 import { Cue } from './Cue';
 import type { TileData } from './Tile';
 import { useGameStore } from '../../store/gameStore';
@@ -203,13 +203,16 @@ export const GameBoard: React.FC = () => {
 
                 {/* 5. Level Badge (Star) */}
                 <Group x={25} y={-25}>
-                    {/* Star Shape approx */}
-                    <KonvaImage
-                        width={30} height={30}
-                        offset={{ x: 15, y: 15 }}
-                    // Utilizing a circle as background for level if no star SVG loaded
+                    {/* Star Shape - using native Star component instead of Image */}
+                    <Star
+                        numPoints={5}
+                        innerRadius={8}
+                        outerRadius={16}
+                        fill="#FFD700"
+                        stroke="#E65100"
+                        strokeWidth={2}
+                        shadowBlur={2}
                     />
-                    <Circle radius={14} fill="#FFD700" stroke="#E65100" strokeWidth={2} shadowBlur={2} />
                     <Text
                         text={player?.level ? `${player.level}` : "1"}
                         fontSize={12} fontStyle="bold" fill="#BF360C"

@@ -1,2 +1,2 @@
-src/components/game/GameBoard.tsx(7,22): error TS2307: Cannot find module 'use-image' or its corresponding type declarations.
+src/components/game/GameBoard.tsx(207,22): error TS2741: Property 'image' is missing in type '{ width: number; height: number; offset: { x: number; y: number; }; }' but required in type 'ImageConfig'.
 Error: Command "npm run build" exited with 2
