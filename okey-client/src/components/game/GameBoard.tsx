@@ -136,7 +136,6 @@ export const GameBoard: React.FC = () => {
     // --- Sub-Components (Inline for simplicity or split later) ---
 
     // Load Assets
-    const [goldFrameImage] = useImage('/assets/gold_frame.png');
 
     // Avatar Component (VIP Style)
     const PlayerAvatar: React.FC<{ player?: any, index: number, isActive: boolean, pos: { x: number, y: number } }> = ({ player, index, isActive, pos }) => {
