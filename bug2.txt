@@ -1,9 +1,14 @@
-✗ Build failed in 608ms
-error during build:
-Could not resolve "../../assets/premium/gold_frame.svg" from "src/components/game/GameBoard.tsx"
-file: /vercel/path0/okey-client/src/components/game/GameBoard.tsx
-    at getRollupError (file:///vercel/path0/okey-client/node_modules/rollup/dist/es/shared/parseAst.js:402:41)
-    at error (file:///vercel/path0/okey-client/node_modules/rollup/dist/es/shared/parseAst.js:398:42)
-    at ModuleLoader.handleInvalidResolvedId (file:///vercel/path0/okey-client/node_modules/rollup/dist/es/shared/node-entry.js:21687:24)
-    at file:///vercel/path0/okey-client/node_modules/rollup/dist/es/shared/node-entry.js:21647:26
-Error: Command "npm run build" exited with 1
+src/components/game/GameBoard.tsx(11,12): error TS2451: Cannot redeclare block-scoped variable 'goldFrameImage'.
+src/components/game/GameBoard.tsx(43,13): error TS2304: Cannot find name 'soundManager'.
+src/components/game/GameBoard.tsx(50,9): error TS2304: Cannot find name 'soundManager'.
+src/components/game/GameBoard.tsx(51,9): error TS2304: Cannot find name 'socketService'.
+src/components/game/GameBoard.tsx(114,17): error TS2304: Cannot find name 'soundManager'.
+src/components/game/GameBoard.tsx(117,17): error TS2304: Cannot find name 'socketService'.
+src/components/game/GameBoard.tsx(121,9): error TS2304: Cannot find name 'soundManager'.
+src/components/game/GameBoard.tsx(128,12): error TS2451: Cannot redeclare block-scoped variable 'goldFrameImage'.
+src/components/game/GameBoard.tsx(166,31): error TS2304: Cannot find name 'AVATAR_COLORS'.
+src/components/game/GameBoard.tsx(178,27): error TS2304: Cannot find name 'AVATAR_COLORS'.
+src/components/game/GameBoard.tsx(294,30): error TS2304: Cannot find name 'getRelativePos'.
+src/components/game/GameBoard.tsx(330,9): error TS2304: Cannot find name 'socketService'.
+src/components/game/GameBoard.tsx(332,13): error TS2304: Cannot find name 'socketService'.
+Error: Command "npm run build" exited with 2

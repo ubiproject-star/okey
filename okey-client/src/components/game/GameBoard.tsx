@@ -5,7 +5,18 @@ import type { TileData } from './Tile';
 import { useGameStore } from '../../store/gameStore';
 import useImage from 'use-image';
 import { Chat } from './Chat';
-// ...
+import { socketService } from '../../services/socket';
+import { soundManager } from '../../managers/SoundManager';
+
+// --- Assets & Constants ---
+const TABLE_COLOR = '#1A4D2E'; // Pro Felt Green
+const AVATAR_COLORS = ['#FF5252', '#448AFF', '#69F0AE', '#FFD740'];
+
+// Helper for Layout
+const getRelativePos = (myIndex: number, targetIndex: number, total: number = 4) => {
+    return (targetIndex - myIndex + total) % total;
+};
+
 export const GameBoard: React.FC = () => {
     const [stageSize, setStageSize] = useState({ width: window.innerWidth, height: window.innerHeight });
     const [goldFrameImage] = useImage('/assets/premium/gold_frame.svg');
