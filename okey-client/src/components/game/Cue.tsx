@@ -2,7 +2,6 @@ import React from 'react';
 import { Group, Rect, Text } from 'react-konva';
 import { Tile, type TileData } from './Tile';
 import useImage from 'use-image';
-import woodSrc from '../../assets/premium/wood_rack.svg';
 
 interface CueProps {
     tiles: (TileData | null)[];
