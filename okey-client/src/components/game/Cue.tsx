@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Group, Rect, Text } from 'react-konva';
 import { Tile, type TileData } from './Tile';
+import useImage from 'use-image';
 
 interface CueProps {
     tiles: (TileData | null)[];
@@ -16,22 +17,17 @@ interface CueProps {
 export const Cue: React.FC<CueProps> = ({ tiles, x, y, width = 800, scale = 1, isMyTurn = false, onTileDragEnd, onSort }) => {
     const height = 90 * scale;
     const depth = 20 * scale;
+    const [woodImage] = useImage('/assets/wood.png');
 
     return (
         <Group x={x} y={y}>
-            {/* 1. Main Rack Body 3D - Rich Wood Gradient */}
+            {/* 1. Main Rack Body 3D - Rich Wood Texture */}
             <Rect
                 width={width}
                 height={height}
-                fillPriority="linear-gradient"
-                fillLinearGradientStartPoint={{ x: 0, y: 0 }}
-                fillLinearGradientEndPoint={{ x: 0, y: height }}
-                fillLinearGradientColorStops={[
-                    0, '#5D4037',     // Light Top
-                    0.4, '#3E2723',   // Dark Middle
-                    0.6, '#3E2723',   // Dark Middle
-                    1, '#2D1B15'      // Shadow Bottom
-                ]}
+                fill="#4E342E" // Fallback
+                fillPatternImage={woodImage}
+                fillPatternScale={{ x: 1, y: 1 }} // Adjust scale if needed
                 cornerRadius={12}
                 shadowBlur={10}
                 shadowColor="black"
@@ -39,7 +35,7 @@ export const Cue: React.FC<CueProps> = ({ tiles, x, y, width = 800, scale = 1, i
                 shadowOffset={{ x: 0, y: 8 }}
             />
 
-            {/* Wood Grain / Groove Effect (Subtle Horizontal Lines) */}
+            {/* Wood Grain / Groove Effect (Subtle Horizontal Lines) - Keep for depth */}
             <Rect
                 x={10}
                 y={height / 2 - 2}
@@ -56,7 +52,9 @@ export const Cue: React.FC<CueProps> = ({ tiles, x, y, width = 800, scale = 1, i
                 y={height - 12}
                 width={width}
                 height={depth}
-                fill="#3E2723"
+                fill="#3E2723" // Keep solid for side/lip to distinguish
+                fillPatternImage={woodImage} // Optional: use texture here too but might look flat if same offset
+                fillPatternOffset={{ x: 0, y: -height }} // Offset to match
                 cornerRadius={[0, 0, 12, 12]}
                 stroke="#5D4037"
                 strokeWidth={1}

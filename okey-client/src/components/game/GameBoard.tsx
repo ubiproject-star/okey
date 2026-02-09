@@ -3,6 +3,7 @@ import { Stage, Layer, Rect, Text, Group, Circle, Arc, Star, Image as KonvaImage
 import { Cue } from './Cue';
 import type { TileData } from './Tile';
 import { useGameStore } from '../../store/gameStore';
+import useImage from 'use-image';
 import { Chat } from './Chat';
 import { socketService } from '../../services/socket';
 import { soundManager } from '../../managers/SoundManager';
@@ -133,6 +134,9 @@ export const GameBoard: React.FC = () => {
 
     // --- Sub-Components (Inline for simplicity or split later) ---
 
+    // Load Assets
+    const [goldFrameImage] = useImage('/assets/gold_frame.png');
+
     // Avatar Component (VIP Style)
     const PlayerAvatar: React.FC<{ player?: any, index: number, isActive: boolean, pos: { x: number, y: number } }> = ({ player, index, isActive, pos }) => {
         const isMe = index === myPlayerIndex; // Identifying self might need logic fix, but for now relying on index passed
@@ -152,14 +156,38 @@ export const GameBoard: React.FC = () => {
                     />
                 )}
 
-                {/* 2. Avatar Frame (Gold/VIP Look) */}
+                {/* 2. Avatar Frame (Gold/VIP Look - Image Asset) */}
+                {goldFrameImage ? (
+                    <KonvaImage
+                        image={goldFrameImage}
+                        width={84}
+                        height={84}
+                        offsetX={42}
+                        offsetY={42}
+                        shadowColor="black"
+                        shadowBlur={5}
+                    />
+                ) : (
+                    // Fallback while loading
+                    <Circle
+                        radius={38}
+                        stroke="#FFD700"
+                        strokeWidth={4}
+                        fill={AVATAR_COLORS[index % 4]}
+                        shadowColor="black"
+                        shadowBlur={5}
+                    />
+                )}
+
+                {/* Avatar Circle (Masked inside?) - For now just circle on top of background but under frame? 
+                    Actually frame should be on top.
+                    Let's put avatar image/color UNDER the frame. 
+                */}
                 <Circle
-                    radius={38}
-                    stroke="#FFD700" // Gold Border
-                    strokeWidth={4}
-                    fill={AVATAR_COLORS[index % 4]} // Fallback color
-                    shadowColor="black"
-                    shadowBlur={5}
+                    radius={32}
+                    fill={AVATAR_COLORS[index % 4]}
+                // stroke="rgba(255,255,255,0.8)" // Frame handles border now
+                // strokeWidth={2}
                 />
 
                 {/* Glossy Overlay on Avatar */}
