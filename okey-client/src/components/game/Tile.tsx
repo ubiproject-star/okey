@@ -27,11 +27,11 @@ const COLOR_MAP: Record<TileColor, string> = {
 };
 
 export const Tile: React.FC<TileProps> = ({ data, x, y, scale = 1, isDraggable = false, onDragStart, onDragEnd }) => {
-    // Standard Okey Tile Ratios
-    const width = 40 * scale;
-    const height = 58 * scale;
-    const thickness = 6 * scale; // 3D Depth
-    const fontSize = 34 * scale;
+    // Standard Okey Tile Ratios (Chunky)
+    const width = 42 * scale; // Slightly wider
+    const height = 60 * scale; // Slightly taller
+    const thickness = 8 * scale; // Deeper 3D effect
+    const fontSize = 38 * scale; // Bigger, bolder font
 
     return (
         <Group
@@ -41,62 +41,73 @@ export const Tile: React.FC<TileProps> = ({ data, x, y, scale = 1, isDraggable =
             onDragEnd={onDragEnd}
             draggable={isDraggable}
         >
-            {/* 1. Base Shadow (Drop Shadow) */}
+            {/* 1. Base Shadow (Deep Drop Shadow) */}
             <Rect
-                x={2}
-                y={2}
+                x={4}
+                y={4}
                 width={width}
                 height={height + thickness}
                 fill="black"
-                opacity={0.3}
-                cornerRadius={4}
-                blurRadius={2}
+                opacity={0.4}
+                cornerRadius={5}
+                blurRadius={4}
             />
 
-            {/* 2. 3D Thickness (Bottom Layer) */}
+            {/* 2. 3D Bevel/Thickness (Darker Cream) */}
             <Rect
                 x={0}
                 y={thickness}
                 width={width}
                 height={height}
-                fill="#BBB" // Darker grey/cream for side
-                cornerRadius={4}
+                fill="#D7CCC8" // Wood-like/Dark Cream side
+                cornerRadius={5}
+                stroke="#A1887F"
+                strokeWidth={1}
             />
 
-            {/* 3. Main Face (Top Surface) */}
+            {/* 3. Main Face (Warm Cream Gradient) */}
             <Rect
                 x={0}
                 y={0}
                 width={width}
                 height={height}
-                fill="#FDFDF8" // Cream white
-                cornerRadius={4}
-                shadowColor="rgba(0,0,0,0.2)"
+                fillPriority="linear-gradient"
+                fillLinearGradientStartPoint={{ x: 0, y: 0 }}
+                fillLinearGradientEndPoint={{ x: width, y: height }}
+                fillLinearGradientColorStops={[0, '#FFFFFF', 1, '#FFF3E0']} // White to Warm Cream
+                cornerRadius={5}
+                stroke="#EFEBE9" // Subtle highlight edge
+                strokeWidth={1}
+                shadowColor="black"
                 shadowBlur={2}
-                shadowOffset={{ x: 0, y: 1 }}
+                shadowOpacity={0.2}
             />
 
-            {/* 4. The Number */}
+            {/* 4. The Number (Chunky & High Contrast) */}
             <Text
                 text={`${data.value}`}
                 fontSize={fontSize}
-                fontStyle="bold"
+                fontStyle="900" // Extra Bold
+                fontFamily="Arial Black, Impact, sans-serif"
                 fill={COLOR_MAP[data.color]}
                 align="center"
                 width={width}
-                y={(height - fontSize) / 2}
+                y={(height - fontSize) / 2 - 2} // Optical center
                 listening={false}
+                shadowColor="rgba(255,255,255,0.5)"
+                shadowBlur={0}
+                shadowOffset={{ x: 0.5, y: 0.5 }} // Slight emboss
             />
 
-            {/* 5. Minimal Gloss/Highlight (Static) */}
+            {/* 5. Surface Gloss (Plastic Shine) */}
             <Rect
-                x={2}
-                y={2}
-                width={width - 4}
-                height={height / 3}
+                x={0}
+                y={0}
+                width={width}
+                height={height / 2}
                 fill="white"
-                opacity={0.2}
-                cornerRadius={[4, 4, 10, 10]}
+                opacity={0.15}
+                cornerRadius={[5, 5, 20, 20]} // Curver bottom for gloss
                 listening={false}
             />
         </Group>

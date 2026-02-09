@@ -34,15 +34,25 @@ body {
 @layer utilities {
   /* High Fidelity Textures */
 
-  .bg-felt {
-    background-color: #1a4d2e;
+  /* Diamond/Quilted Felt Pattern */
+  .bg-pattern-felt {
+    background-color: #1A4D2E;
     background-image:
-      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0.4) 100%),
-      repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 4px),
-      repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 4px),
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
-    background-blend-mode: normal, normal, normal, overlay;
-    box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
+      linear-gradient(135deg, rgba(255, 255, 255, 0.05) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.05) 75%, transparent 75%, transparent),
+      linear-gradient(45deg, rgba(255, 255, 255, 0.05) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.05) 75%, transparent 75%, transparent),
+      radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+    background-size: 40px 40px, 40px 40px, cover;
+  }
+
+  /* Richer Wood Texture */
+  .bg-wood-texture {
+    background: linear-gradient(to bottom, #5D4037, #3E2723),
+      repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(0, 0, 0, 0.1) 11px, transparent 12px);
+    box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.1), inset 0 -2px 5px rgba(0, 0, 0, 0.5);
+  }
+
+  .bg-felt {
+    @apply bg-pattern-felt;
   }
 
   .bg-wood {

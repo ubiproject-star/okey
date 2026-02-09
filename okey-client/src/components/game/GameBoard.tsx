@@ -133,119 +133,121 @@ export const GameBoard: React.FC = () => {
 
     // --- Sub-Components (Inline for simplicity or split later) ---
 
-    // Avatar Component
+    // Avatar Component (VIP Style)
     const PlayerAvatar: React.FC<{ player?: any, index: number, isActive: boolean, pos: { x: number, y: number } }> = ({ player, index, isActive, pos }) => {
+        const isMe = index === myPlayerIndex; // Identifying self might need logic fix, but for now relying on index passed
+
         return (
             <Group x={pos.x} y={pos.y}>
-                {/* Active Turn Glow */}
+                {/* 1. Active Turn Halo (Spinning Gold Glow) */}
                 {isActive && (
                     <Circle
-                        radius={42}
+                        radius={52}
                         fillRadialGradientStartPoint={{ x: 0, y: 0 }}
-                        fillRadialGradientStartRadius={20}
+                        fillRadialGradientStartRadius={30}
                         fillRadialGradientEndPoint={{ x: 0, y: 0 }}
-                        fillRadialGradientEndRadius={45}
-                        fillRadialGradientColorStops={[0, 'rgba(255, 215, 0, 0.2)', 1, 'rgba(255, 215, 0, 0)']}
-                    />
-                )}
-
-                {/* 2. Timer Ring (Counts down from 30s) - Visual Only for now */}
-                {/* We need a real timer sync. For now, using static visual or simple local countdown */}
-                {/* Center Timer Text */}
-                <Group>
-                    <Arc
-                        innerRadius={55}
-                        outerRadius={65}
-                        angle={360 * (timer / 30)}
-                        fill={timer < 10 ? "#ff0000" : "#ffd700"}
+                        fillRadialGradientEndRadius={55}
+                        fillRadialGradientColorStops={[0, 'rgba(255, 215, 0, 0.6)', 1, 'rgba(255, 215, 0, 0)']}
                         opacity={0.8}
-                        rotation={-90}
-                        shadowBlur={timer < 10 ? 20 : 0}
-                        shadowColor="red"
-                    />
-                    {/* Heartbeat Animation for Low Time */}
-                    {timer < 10 && (
-                        <Arc
-                            innerRadius={55}
-                            outerRadius={70}
-                            angle={360}
-                            fill="red"
-                            opacity={0.2}
-                            rotation={-90}
-                            listening={false}
-                        />
-                    )}
-                </Group>
-
-
-                {/* Ring Timer Background */}
-                <Arc
-                    innerRadius={36}
-                    outerRadius={40}
-                    angle={360}
-                    fill="rgba(255,255,255,0.1)"
-                    rotation={0}
-                    listening={false}
-                />
-
-                {/* Active Ring Timer (Progress) - Reference Video Style */}
-                {isActive && (
-                    <Arc
-                        innerRadius={36}
-                        outerRadius={40}
-                        angle={300} // Mock progress (should decrease over time)
-                        fill="#FFD700" // Gold
-                        rotation={-90}
-                        shadowColor="#FFD700"
-                        shadowBlur={10}
-                        listening={false}
                     />
                 )}
 
-                {/* Avatar Circle (Glassy Look) */}
+                {/* 2. Avatar Frame (Gold/VIP Look) */}
                 <Circle
-                    radius={32}
-                    fill={AVATAR_COLORS[index % 4]}
-                    stroke="rgba(255,255,255,0.8)"
-                    strokeWidth={2}
+                    radius={38}
+                    stroke="#FFD700" // Gold Border
+                    strokeWidth={4}
+                    fill={AVATAR_COLORS[index % 4]} // Fallback color
                     shadowColor="black"
                     shadowBlur={5}
                 />
 
-                {/* Initials */}
-                <Text
-                    text={player?.name?.substring(0, 2).toUpperCase() || "P"}
-                    x={-15} y={-10} width={30} align="center"
-                    fontSize={20} fontStyle="bold" fill="white"
-                    shadowColor="black" shadowBlur={2}
+                {/* Glossy Overlay on Avatar */}
+                <Arc
+                    innerRadius={0}
+                    outerRadius={38}
+                    angle={180}
+                    rotation={-45}
+                    fill="linear-gradient(to bottom, rgba(255,255,255,0.4), transparent)"
+                    opacity={0.3}
+                    listening={false}
                 />
 
-                {/* Glass UI Name Tag */}
-                <Group y={40}>
-                    <Rect
-                        x={-50}
-                        width={100}
-                        height={24}
-                        fill="rgba(0,0,0,0.6)"
-                        cornerRadius={12}
-                        stroke="rgba(255,255,255,0.1)"
-                        strokeWidth={1}
+                {/* 3. Timer Indicator (Ring Progress) */}
+                <Arc
+                    innerRadius={42}
+                    outerRadius={46}
+                    angle={360}
+                    fill="#333"
+                    opacity={0.5}
+                />
+                {isActive && (
+                    <Arc
+                        innerRadius={42}
+                        outerRadius={46}
+                        angle={360 * (timer / 30)}
+                        fill={timer < 10 ? "#FF1744" : "#00E676"} // Red/Green
+                        rotation={-90}
+                        shadowColor={timer < 10 ? "red" : "green"}
+                        shadowBlur={10}
                     />
+                )}
+
+                {/* 4. Initials / Image Placeholder */}
+                <Text
+                    text={player?.name?.substring(0, 2).toUpperCase() || "P"}
+                    x={-20} y={-10} width={40} align="center"
+                    fontSize={24} fontStyle="bold" fill="white"
+                    shadowColor="black" shadowBlur={3}
+                />
+
+                {/* 5. Level Badge (Star) */}
+                <Group x={25} y={-25}>
+                    {/* Star Shape approx */}
+                    <KonvaImage
+                        width={30} height={30}
+                        offset={{ x: 15, y: 15 }}
+                    // Utilizing a circle as background for level if no star SVG loaded
+                    />
+                    <Circle radius={14} fill="#FFD700" stroke="#E65100" strokeWidth={2} shadowBlur={2} />
                     <Text
-                        text={player?.name || "Waiting..."}
-                        y={6} width={100} x={-50} align="center"
-                        fontSize={12} fill="#EEE"
-                        fontFamily="Arial"
+                        text={player?.level ? `${player.level}` : "1"}
+                        fontSize={12} fontStyle="bold" fill="#BF360C"
+                        x={-14} y={-6} width={28} align="center"
                     />
                 </Group>
 
-                {/* Score Bubble */}
-                <Group x={30} y={-30}>
-                    <Circle radius={12} fill="#D32F2F" stroke="white" strokeWidth={1} shadowBlur={2} />
+                {/* 6. Name Plate (VIP Badge Style) */}
+                <Group y={45}>
+                    {/* Background Plate */}
+                    <Rect
+                        x={-60}
+                        width={120}
+                        height={28}
+                        fillLinearGradientStartPoint={{ x: 0, y: 0 }}
+                        fillLinearGradientEndPoint={{ x: 0, y: 28 }}
+                        fillLinearGradientColorStops={[0, '#424242', 1, '#212121']}
+                        cornerRadius={14}
+                        stroke="#FFD700"
+                        strokeWidth={2}
+                        shadowColor="black"
+                        shadowBlur={4}
+                    />
+                    <Text
+                        text={player?.name || "Waiting..."}
+                        y={7} width={120} x={-60} align="center"
+                        fontSize={14} fontStyle="bold" fill="#FFD700" // Gold Text
+                        shadowColor="black" shadowBlur={1}
+                    />
+                </Group>
+
+                {/* 7. Money/Chips Display */}
+                <Group y={75}>
+                    <Rect x={-40} width={80} height={20} fill="rgba(0,0,0,0.5)" cornerRadius={10} />
                     <Text
                         text={player?.score ? `${player.score} ` : "0"}
-                        x={-12} y={-5} width={24} align="center"
-                        fontSize={10} fontStyle="bold" fill="white"
+                        y={4} width={80} x={-40} align="center"
+                        fontSize={11} fill="#FFF"
                     />
                 </Group>
             </Group>
@@ -326,7 +328,7 @@ export const GameBoard: React.FC = () => {
     if (!isInGame) return <div className="text-white flex items-center justify-center h-full font-bold text-xl tracking-widest animate-pulse">CONNECTING TO ROOM...</div>;
 
     return (
-        <div className="relative w-full h-full bg-felt overflow-hidden">
+        <div className="relative w-full h-full bg-pattern-felt overflow-hidden">
             {/* CSS Wood Border (Top/Bottom) - More realistic than Canvas Rect */}
             <div className="absolute top-0 left-0 right-0 h-6 bg-wood shadow-lg z-10 border-b border-black/50"></div>
             <div className="absolute bottom-0 left-0 right-0 h-6 bg-wood shadow-lg z-10 border-t border-black/50"></div>

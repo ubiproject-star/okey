@@ -19,27 +19,62 @@ export const Cue: React.FC<CueProps> = ({ tiles, x, y, width = 800, scale = 1, i
 
     return (
         <Group x={x} y={y}>
-            {/* 1. Main Rack Body 3D - Solid Wood Color for Stability */}
+            {/* 1. Main Rack Body 3D - Rich Wood Gradient */}
             <Rect
                 width={width}
                 height={height}
-                fill="#4E342E"
-                cornerRadius={8}
-                shadowBlur={15}
+                fillPriority="linear-gradient"
+                fillLinearGradientStartPoint={{ x: 0, y: 0 }}
+                fillLinearGradientEndPoint={{ x: 0, y: height }}
+                fillLinearGradientColorStops={[
+                    0, '#5D4037',     // Light Top
+                    0.4, '#3E2723',   // Dark Middle
+                    0.6, '#3E2723',   // Dark Middle
+                    1, '#2D1B15'      // Shadow Bottom
+                ]}
+                cornerRadius={12}
+                shadowBlur={10}
                 shadowColor="black"
-                shadowOpacity={0.8}
-                shadowOffset={{ x: 0, y: 5 }}
+                shadowOpacity={0.6}
+                shadowOffset={{ x: 0, y: 8 }}
             />
 
-            {/* Rack Depth/Lip - Front Face */}
+            {/* Wood Grain / Groove Effect (Subtle Horizontal Lines) */}
             <Rect
-                y={height - 8}
+                x={10}
+                y={height / 2 - 2}
+                width={width - 20}
+                height={4}
+                fill="#271815"
+                opacity={0.3}
+                cornerRadius={2}
+                listening={false}
+            />
+
+            {/* Rack Depth/Lip - Front Face with Highlight */}
+            <Rect
+                y={height - 12}
                 width={width}
                 height={depth}
-                fill="#2D1B15"
-                cornerRadius={[0, 0, 8, 8]}
-                shadowBlur={5}
-                shadowColor="black"
+                fill="#3E2723"
+                cornerRadius={[0, 0, 12, 12]}
+                stroke="#5D4037"
+                strokeWidth={1}
+                strokeHitEnabled={false}
+            />
+
+            {/* Side Metal Accents (Gold Caps) */}
+            <Rect
+                x={0} y={10} width={12} height={height - 20}
+                fill="linear-gradient(to right, #FFD700, #FFA000)"
+                cornerRadius={[4, 0, 0, 4]}
+                shadowColor="black" shadowBlur={2}
+            />
+            <Rect
+                x={width - 12} y={10} width={12} height={height - 20}
+                fill="linear-gradient(to left, #FFD700, #FFA000)"
+                cornerRadius={[0, 4, 4, 0]}
+                shadowColor="black" shadowBlur={2}
             />
 
             {/* Highlight/Active indicator - Glowing Border */}
