@@ -331,6 +331,14 @@ export const GameBoard: React.FC = () => {
             <div className="absolute top-0 left-0 right-0 h-6 bg-wood shadow-lg z-10 border-b border-black/50"></div>
             <div className="absolute bottom-0 left-0 right-0 h-6 bg-wood shadow-lg z-10 border-t border-black/50"></div>
 
+            {/* HTML DEBUG OVERLAY */}
+            <div className="absolute top-20 left-10 z-50 bg-black/80 text-white p-4 rounded border border-red-500 font-mono text-xs">
+                <h3>HTML DEBUG</h3>
+                <p>Stage: {stageSize.width}x{stageSize.height}</p>
+                <p>InGame: {String(isInGame)}</p>
+                <p>ID: {myPlayerId || 'null'}</p>
+            </div>
+
             <Stage width={stageSize.width} height={stageSize.height} style={{ background: 'transparent' }}>
                 <Layer>
                     {/* DEBUG RECT: Verify Canvas is Rendering */}
